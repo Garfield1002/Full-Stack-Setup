@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  uwsgi:
+    build: ./app
+    restart: always
+    command: pipenv run uwsgi --ini uwsgi/app.ini
+    volumes:
+      - /tmp
+    env_file:
+      - ./.env
+
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - 8002:80
+    volumes_from:
+      - uwsgi
